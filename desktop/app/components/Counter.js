@@ -8,7 +8,7 @@ import Note from "../components/note/note"
 import Mdviewer from "../components/mdviewer/mdviewer"
 import base from "../base"
 import firebase from 'firebase'
-console.log("firebase", firebase.database().ref().set)
+console.log("firebase", firebase)
 
 console.log(base);
 
@@ -23,6 +23,7 @@ console.log(base);
 export default class Counter extends Component<Props> {
   constructor(props) {
     super(props);
+
     this.state = {
       notes: [],
       inUse: "",
@@ -41,14 +42,27 @@ export default class Counter extends Component<Props> {
     this.auth = this.auth.bind(this)
     this.authHandler = this.authHandler.bind(this)
     this.getNotes = this.getNotes.bind(this)
+    this.staySignedIn = this.staySignedIn.bind(this)
+    this.logout = this.logout.bind(this)
+
   }
+
 
   // UNSAFE_componentWillMount() {
   //   this.notesRef = base.syncState(`${this.state.uid}/notes`, {
   //     context: this,
   //     state: "notes"
   //   })
-  // }
+  // } 
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ uid: user.uid });
+        this.getNotes()
+      }
+    });
+
+  }
 
   componentWillUnmount() {
     base.removeBinding(this.notesRef)
@@ -100,7 +114,7 @@ export default class Counter extends Component<Props> {
       firebase.auth().signInWithEmailAndPassword(email, pass).then((result) => {
 
         this.authHandler(result)
-
+        this.staySignedIn(email, pass)
         return
       }).catch((error) => {
         // Handle Errors here.
@@ -112,6 +126,7 @@ export default class Counter extends Component<Props> {
       firebase.auth().createUserWithEmailAndPassword(email, pass).then((result) => {
         this.newUser(result)
         this.authHandler(result)
+        this.staySignedIn(email, pass)
         return
       }).catch((error) => {
         // Handle Errors here.
@@ -122,28 +137,17 @@ export default class Counter extends Component<Props> {
     }
   }
 
+  staySignedIn() {
+    firebase.auth().setPersistence("local")
+  }
+
   newUser(data) {
-    console.log("new user", data);
-
-    // base.post(`users/${data.user.uid}`, {
-    //   notes: ["# your first note"]
-    // }
-    // ).catch(err => {
-    //   console.log(err);
-    // });
-
     base.post(`users/${data.user.uid}/notes`, {
       data: ["# your first note"]
     })
-    // firebase.database().ref(`users/${data.user.uid}`).set({
-    //   notes: ["# your first note"]
-    // });
-    console.log(this);
-
   }
 
   authHandler(authData) {
-    console.log(authData);
     this.setState({ uid: authData.user.uid })
     this.getNotes()
   }
@@ -154,6 +158,23 @@ export default class Counter extends Component<Props> {
       context: this,
       state: "notes"
     })
+  }
+
+  logout() {
+    console.log("signing off");
+
+    firebase.auth().signOut()
+      .then(() => {
+        this.setState({
+          uid: null
+        });
+        return
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   }
 
   renderLogin() {
@@ -181,6 +202,7 @@ export default class Counter extends Component<Props> {
           <Link to={routes.HOME}>
             <i className="fa fa-arrow-left fa-3x" />
           </Link>
+          <button onClick={() => this.logout()}>sign out</button>
         </div>
         <div className={style.wraper}>
           <div className={style.sidebar}>

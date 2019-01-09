@@ -15,6 +15,18 @@ import Note from "../components/note"
 import Mdviewer from "../components/mdviewer"
 import { MonoText } from '../components/StyledText';
 import Markdown from 'react-native-simple-markdown'
+import firebase from 'firebase'
+// const config = {
+//   apiKey: "AIzaSyCOGqbjz-RvVklmM3LlY7WpNuWu1IP6JYs",
+//   authDomain: "md-notes-eb533.firebaseapp.com",
+//   databaseURL: "https://md-notes-eb533.firebaseio.com",
+//   projectId: "md-notes-eb533",
+//   storageBucket: "md-notes-eb533.appspot.com",
+//   messagingSenderId: "310717051496"
+// }
+
+// const app = firebase.initializeApp(config);
+import base from "../base"
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -25,12 +37,13 @@ export default class HomeScreen extends React.Component {
     this.state = {
       email: "",
       pass: "",
-      notes: ["# this is a test", "**Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, vitae. Excepturi odit molestias ipsam optio quibusdam doloribus accusamus, totam possimus officiis, molestiae quia magnam minus, aliquid assumenda ex necessitatibus quaerat?**"],
+      notes: [],
       inUse: "",
       inUseIndex: null,
       editing: null,
       uid: null
     }
+    // this.itemsRef = app.database().ref();
     // this.password = React.createRef()
     // this.email = React.createRef()
     this.chose = this.chose.bind(this)
@@ -39,11 +52,19 @@ export default class HomeScreen extends React.Component {
     this.swap = this.swap.bind(this)
     this.newNote = this.newNote.bind(this)
     // this.renderLogin = this.renderLogin.bind(this)
-    // this.auth = this.auth.bind(this)
-    // this.authHandler = this.authHandler.bind(this)
-    // this.getNotes = this.getNotes.bind(this)
+    this.auth = this.auth.bind(this)
+    this.authHandler = this.authHandler.bind(this)
+    this.getNotes = this.getNotes.bind(this)
   }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ uid: user.uid });
+        this.getNotes()
+      }
+    });
 
+  }
   chose(i, arr) {
     // console.log(i, arr);
     this.setState({ editing: false })
@@ -81,11 +102,79 @@ export default class HomeScreen extends React.Component {
     this.setState({ notes: oldNotes })
   }
 
+  auth(logIn) {
+    const pass = this.state.pass
+    const email = this.state.email
+    if (logIn) {
+      firebase.auth().signInWithEmailAndPassword(email, pass).then((result) => {
+
+        this.authHandler(result)
+        this.staySignedIn(email, pass)
+        return
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+    } else {
+      firebase.auth().createUserWithEmailAndPassword(email, pass).then((result) => {
+        this.newUser(result)
+        this.authHandler(result)
+        this.staySignedIn(email, pass)
+
+        return
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+    }
+  }
+
+  authHandler(authData) {
+    console.log(authData);
+    this.setState({ uid: authData.user.uid })
+    this.getNotes()
+  }
+  newUser(data) {
+
+
+    // base.post(`users/${data.user.uid}`, {
+    //   notes: ["# your first note"]
+    // }
+    // ).catch(err => {
+    //   console.log(err);
+    // });
+
+    // base.post(`users/${data.user.uid}/notes`, {
+    //   data: ["# your first note"]
+    // })
+    firebase.database().ref(`users/${data.user.uid}`).set({
+      notes: ["# your first note on your IOS device"]
+    });
+  }
+  staySignedIn() {
+    firebase.auth().setPersistence("local")
+  }
+  getNotes() {
+    // console.log("firebase value", firebase.database().ref(`users/${this.state.uid}/notes`).orderByValue());
+    // //   this.notesRef = base.syncState(`users/${this.state.uid}/notes`, {
+    // //     context: this,
+    // //     state: "notes"
+    // //   })
+
+    this.notesRef = base.syncState(`users/${this.state.uid}/notes`, {
+      context: this,
+      state: "notes"
+    })
+  }
 
   render() {
     if (!this.state.uid) {
       return (
-        <View>
+        <View style={loginStyles.wrapper}>
           <Text>email</Text>
           <TextInput
             style={styles.textArea}
@@ -94,7 +183,7 @@ export default class HomeScreen extends React.Component {
             placeholderTextColor="grey"
             onChangeText={(text) => this.setState({ email: text })}
             value={this.state.email} />
-          <Text>pass word</Text>
+          <Text>pass word8</Text>
           <TextInput
             style={styles.textArea}
             underlineColorAndroid="transparent"
@@ -102,39 +191,42 @@ export default class HomeScreen extends React.Component {
             placeholderTextColor="grey"
             onChangeText={(text) => this.setState({ pass: text })}
             value={this.state.pass} />
-
+          <Button title="sign up" onPress={() => this.auth(false)} />
+          <Button title="login" onPress={() => this.auth(true)} />
         </View>
+
       )
-    }
-    return (
-      <View style={styles.container}>
-        <View style={sidebarStyles.sidebar}>
-          {this.state.notes.map((note, index) => (
+    } else {
+      return (
+        <View style={styles.container}>
+          <View style={sidebarStyles.sidebar}>
+            {this.state.notes.map((note, index) => (
 
-            <View key={index} style={sidebarStyles.sidebar__note}>
+              <View key={index} style={sidebarStyles.sidebar__note}>
 
-              <View style={{ background: "red" }} >
+                <View style={{ background: "red" }} >
 
-                <Markdown>
-                  {note.substring(0, 50)}
-                </Markdown>
+                  <Markdown>
+                    {note.substring(0, 50)}
+                  </Markdown>
 
+                </View>
+                <Button title="vue this one" onPress={() => this.chose(index, this.state.notes)} />
+                <Button onPress={() => this.edit(index, this.state.notes)}
+                  title="Edit this one"
+                />
               </View>
-              <Button title="vue this one" onPress={() => this.chose(index, this.state.notes)} />
-              <Button onPress={() => this.edit(index, this.state.notes)}
-                title="Edit this one"
-              />
-            </View>
-          ))}
-          <Button onPress={this.newNote} title="New Note" />
-        </View>
+            ))}
+            <Button onPress={this.newNote} title="New Note" />
+          </View>
 
-        <View style={BodyStyles.body}>
-          {this.state.editing ? (<Note md={this.state.inUse} swap={this.swap} update={this.noteUpdate} />) : (<Mdviewer md={this.state.inUse} swap={this.swap} />)}
-        </View>
+          <View style={BodyStyles.body}>
+            {this.state.editing ? (<Note md={this.state.inUse} swap={this.swap} update={this.noteUpdate} />) : (<Mdviewer md={this.state.inUse} swap={this.swap} />)}
+          </View>
 
-      </View>
-    );
+        </View>
+      );
+    }
   }
 
   _maybeRenderDevelopmentModeWarning() {
@@ -171,7 +263,13 @@ export default class HomeScreen extends React.Component {
   };
 }
 
-
+const loginStyles = {
+  wrapper: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }
+}
 const BodyStyles = {
   body: {
     width: 600
@@ -188,8 +286,8 @@ const sidebarStyles = {
   },
   sidebar__note: {
     backgroundColor: "green",
-    height: 20,
-    flex: 1,
+    // height: 50,
+
   }
 }
 const styles = StyleSheet.create({
