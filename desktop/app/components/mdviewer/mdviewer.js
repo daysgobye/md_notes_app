@@ -9,12 +9,10 @@ class Mdviewer extends React.Component {
 
     getRawMarkup(passed) {
         const md = new Remarkable();
-        console.log("passed", passed, "md", md, "render", md.render(passed));
         return { __html: md.render(passed) };
     }
 
     componentDidMount() {
-        console.log(this.props);
 
     }
 

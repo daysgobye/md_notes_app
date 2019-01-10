@@ -8,6 +8,7 @@ import Note from "../components/note/note"
 import Mdviewer from "../components/mdviewer/mdviewer"
 import base from "../base"
 import firebase from 'firebase'
+
 console.log("firebase", firebase)
 
 console.log(base);
