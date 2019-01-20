@@ -35,6 +35,7 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      expandSidebar: true,
       email: "",
       pass: "",
       notes: [],
@@ -43,6 +44,8 @@ export default class HomeScreen extends React.Component {
       editing: null,
       uid: null
     }
+    this.toggleSidebar = this.toggleSidebar.bind(this)
+    this.delNote = this.delNote.bind(this)
     // this.itemsRef = app.database().ref();
     // this.password = React.createRef()
     // this.email = React.createRef()
@@ -70,7 +73,7 @@ export default class HomeScreen extends React.Component {
     this.setState({ editing: false })
     this.setState({ inUse: arr[i] })
     this.setState({ inUseIndex: i })
-
+    this.toggleSidebar()
   }
 
   edit(i, arr) {
@@ -78,6 +81,7 @@ export default class HomeScreen extends React.Component {
     this.setState({ editing: true })
     this.setState({ inUse: arr[i] })
     this.setState({ inUseIndex: i })
+    this.toggleSidebar()
   }
 
   noteUpdate(data) {
@@ -90,7 +94,11 @@ export default class HomeScreen extends React.Component {
     // console.log(this.state.inUse);
 
   }
-
+  delNote(i) {
+    const tempnotes = this.state.notes
+    tempnotes.splice(i, 1)
+    this.setState({ notes: tempnotes })
+  }
   swap() {
     const was = this.state.editing
     this.setState({ editing: !was })
@@ -99,7 +107,16 @@ export default class HomeScreen extends React.Component {
   newNote() {
     const oldNotes = this.state.notes
     oldNotes.push("")
+    const i = oldNotes.length
     this.setState({ notes: oldNotes })
+    this.setState({ editing: true })
+    this.setState({ inUse: this.state.notes[i] })
+    this.setState({ inUseIndex: i })
+
+  }
+  toggleSidebar() {
+    const tempState = !this.state.expandSidebar
+    this.setState({ expandSidebar: tempState })
   }
 
   auth(logIn) {
@@ -199,10 +216,10 @@ export default class HomeScreen extends React.Component {
     } else {
       return (
         <View style={styles.container}>
-          <View style={sidebarStyles.sidebar}>
+          <View style={[this.state.expandSidebar ? sidebarStyles.sidebarOpen : sidebarStyles.sidebarClosed]}>
             {this.state.notes.map((note, index) => (
 
-              <View key={index} style={sidebarStyles.sidebar__note}>
+              <View key={index} style={[this.state.expandSidebar ? sidebarStyles.sidebar__noteOpen : sidebarStyles.sidebar__noteClosed]}>
 
                 <View style={{ background: "red" }} >
 
@@ -211,12 +228,14 @@ export default class HomeScreen extends React.Component {
                   </Markdown>
 
                 </View>
+                <Button onPress={() => this.delNote(index)} title="delete Note" />
                 <Button title="vue this one" onPress={() => this.chose(index, this.state.notes)} />
                 <Button onPress={() => this.edit(index, this.state.notes)}
                   title="Edit this one"
                 />
               </View>
             ))}
+            <Button onPress={this.toggleSidebar} title="toggle" />
             <Button onPress={this.newNote} title="New Note" />
           </View>
 
@@ -272,24 +291,31 @@ const loginStyles = {
 }
 const BodyStyles = {
   body: {
-    width: 600
+    flex: 1,
   }
 }
-const sidebarStyles = {
-  sidebar: {
+const sidebarStyles = StyleSheet.create({
+  sidebarOpen: {
     marginTop: 20,
     backgroundColor: "white",
-    flex: 1,
-    width: 100,
+    width: 500,
     flexDirection: "column",
 
   },
-  sidebar__note: {
+  sidebarClosed: {
+    marginTop: 20,
+    backgroundColor: "white",
+    width: 70,
+    flexDirection: "column",
+  },
+  sidebar__noteOpen: {
     backgroundColor: "green",
     // height: 50,
-
+  },
+  sidebar__noteClosed: {
+    display: "none"
   }
-}
+})
 const styles = StyleSheet.create({
   container: {
     flex: 2,

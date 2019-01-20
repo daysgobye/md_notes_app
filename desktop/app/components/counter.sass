@@ -1,10 +1,13 @@
 .wraper
     display: flex
-    width: 100vw
+    // width: 100vw
+
+    overflow: hidden
     .sidebar
         display: flex
         flex-direction: column
-        width: 20%
+        width: 18%
+        height: 100%
         &__note
             display: flex
             flex-direction: column
@@ -12,11 +15,12 @@
             background: skyblue
             margin-bottom: 10px
     .body
+        right: 0
+        position: fixed
         display: flex
         flex-direction: column
         // justify-content: center
         align-items: center
         // background: red
         width: 80%
-        height: 97vh
-        overflow: scroll
+        height: 100%

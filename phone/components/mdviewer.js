@@ -1,6 +1,6 @@
 
 import React from 'react'
-import Markdown from 'react-native-simple-markdown'
+import Markdown from "./myMd/react-native-simple-markdown/index"
 import {
     Image,
     Platform,
