@@ -4,21 +4,28 @@ class SideBar extends Component {
         super(props);
         this.state = {}
     }
+
+
     render() {
         return (
-            {
-                this.state.notes.map((note, index) => (
+            <div>
+                {this.props.notes.map((note, index) => (
 
-                    <div key={index} className={style.sidebar__note}>
-                        <div style={{ background: "red" }} onClick={() => this.chose(index, this.state.notes)}>
+                    <div key={index} className={"stuff"}>
+                        <div style={{ background: "red" }} onClick={() => this.props.chose(index, this.props.notes)}>
                             {note.substring(0, 50)}
                         </div>
 
-                        <button onClick={() => this.edit(index, this.state.notes)}>Edit this one</button>
-                        <button onClick={() => this.deleteNote(index)}> delete note</button>
+                        <button onClick={() => this.props.edit(index, this.props.notes)}>Edit this one</button>
+                        <button onClick={() => this.props.delNote(index)}> delete note</button>
                     </div>
-                ))
-            }
+                ))}
+
+                <button onClick={this.props.openSettings}>settings</button>
+                <button onClick={this.props.newNote}>New note</button>
+            </div>
+
+
         );
     }
 }

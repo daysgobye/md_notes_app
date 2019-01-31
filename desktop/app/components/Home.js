@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import styles from './Counter.css';
 import style from "./counter.sass"
 import routes from '../constants/routes';
-import Note from "../components/note/note"
-import Mdviewer from "../components/mdviewer/mdviewer"
+import Body from "../components/body/Body"
+import Sidebar from "../components/sidebar/Sidebar"
 import base from "../base"
 import firebase from 'firebase'
 import Settings from './Settings/Settings'
@@ -13,14 +13,6 @@ import Settings from './Settings/Settings'
 console.log("firebase", firebase)
 
 console.log(base);
-
-// type Props = {
-//   // increment: () => void,
-//   // incrementIfOdd: () => void,
-//   // incrementAsync: () => void,
-//   // decrement: () => void,
-//   // counter: number
-// };
 
 export default class Home extends Component<Props> {
   constructor(props) {
@@ -220,11 +212,11 @@ export default class Home extends Component<Props> {
   renderLogin() {
     return (
       <div>
-        <p>pass</p>
-        <input ref={this.password} type="text" />
         <p>email</p>
         <input ref={this.email} type="text" />
-        <button onClick={() => this.auth(true)}>login with git hub</button>
+        <p>pass</p>
+        <input ref={this.password} type="text" />
+        <button onClick={() => this.auth(true)}>login</button>
         <button onClick={() => this.auth(false)}>sign up</button>
       </div>
 
@@ -239,30 +231,12 @@ export default class Home extends Component<Props> {
     }
 
     return (
-      <div>
-        <div className={styles.backButton} data-tid="backButton">
-
+      <div className={style.wraper}>
+        <div className={style.sidebar}>
+          <Sidebar notes={this.state.notes} edit={this.edit} chose={this.chose} delNote={this.delNote} newNote={this.newNote} openSettings={this.openSettings} />
         </div>
-        <div className={style.wraper}>
-          <div className={style.sidebar}>
-            {this.state.notes.map((note, index) => (
-
-              <div key={index} className={style.sidebar__note}>
-                <div style={{ background: "red" }} onClick={() => this.chose(index, this.state.notes)}>
-                  {note.substring(0, 50)}
-                </div>
-
-                <button onClick={() => this.edit(index, this.state.notes)}>Edit this one</button>
-                <button onClick={() => this.deleteNote(index)}> delete note</button>
-              </div>
-            ))}
-            <button onClick={this.openSettings}>settings</button>
-            <button onClick={this.newNote}>New note</button>
-          </div>
-          <div className={style.body}>
-            {this.state.editing ? (<Note md={this.state.inUse} swap={this.viewNote} delete={this.deleteNote} index={this.state.inUseIndex} update={this.noteUpdate} />) : (<Mdviewer md={this.state.inUse} />)}
-          </div>
-
+        <div className={style.body}>
+          <Body editing={this.state.editing} inUse={this.state.inUse} viewNote={this.viewNote} deleteNote={this.deleteNote} inUseIndex={this.state.inUseIndex} noteUpdate={this.noteUpdate} />
         </div>
       </div>
     );
