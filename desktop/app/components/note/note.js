@@ -56,8 +56,10 @@ class Note extends React.Component {
     render() {
         return (
             <div className={style.wraper}>
-                <button onClick={this.swap}>view</button>
-                <button onClick={this.del}>delete</button>
+                <div className={style.buttons}>
+                    <button onClick={this.swap}>view</button>
+                    <button onClick={this.del}>delete</button>
+                </div>
                 <textarea name="" id="" ref={this.textzone} onChange={this.changeHandler}></textarea>
             </div>
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import style from "./sidebar.sass"
 class SideBar extends Component {
     constructor(props) {
         super(props);
@@ -8,11 +9,11 @@ class SideBar extends Component {
 
     render() {
         return (
-            <div>
+            <div className={` ${this.props.theme === "term" ? style.term : style.default}`}>
                 {this.props.notes.map((note, index) => (
 
                     <div key={index} className={"stuff"}>
-                        <div style={{ background: "red" }} onClick={() => this.props.chose(index, this.props.notes)}>
+                        <div className=" note" onClick={() => this.props.chose(index, this.props.notes)}>
                             {note.substring(0, 50)}
                         </div>
 

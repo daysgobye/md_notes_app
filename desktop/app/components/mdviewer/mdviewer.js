@@ -18,7 +18,9 @@ class Mdviewer extends React.Component {
 
     render() {
         return (
-            <div className={style.wraper} dangerouslySetInnerHTML={this.getRawMarkup(this.props.md)}>
+            <div className={style.wraper}>
+                <div className={style.mdbody} dangerouslySetInnerHTML={this.getRawMarkup(this.props.md)}>
+                </div>
             </div>
         );
     }

@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Counter.css';
+// import styles from './Counter.css';
 import style from "./counter.sass"
 import routes from '../constants/routes';
 import Body from "../components/body/Body"
@@ -20,13 +20,18 @@ export default class Home extends Component<Props> {
 
     this.state = {
       notes: [],
+      theme: "term",
       inUse: "",
       inUseIndex: null,
       editing: null,
       uid: null,
-      inSetting: null
+      inSetting: null,
+      themes: [
+        "term",
+        "anime"
+      ]
     }
-
+    this.themepick = this.themepick.bind(this)
     this.password = React.createRef()
     this.email = React.createRef()
     this.delNote = this.delNote.bind(this)
@@ -209,6 +214,12 @@ export default class Home extends Component<Props> {
       });
   }
 
+  themepick(pick) {
+    console.log("changing theme", pick);
+
+    this.setState({ theme: pick })
+  }
+
   renderLogin() {
     return (
       <div>
@@ -227,16 +238,18 @@ export default class Home extends Component<Props> {
     if (!this.state.uid) {
       return <div>{this.renderLogin()}</div>
     } else if (this.state.inSettings) {
-      return <Settings close={this.closeSettings} logout={this.logout}></Settings>
+      return <Settings close={this.closeSettings} themes={this.state.themes} themepick={this.themepick} logout={this.logout}></Settings>
     }
 
     return (
-      <div className={style.wraper}>
+      <div className={`${style.wraper} ${this.state.theme === "term" ? style.term : style.default}`}>
+
         <div className={style.sidebar}>
-          <Sidebar notes={this.state.notes} edit={this.edit} chose={this.chose} delNote={this.delNote} newNote={this.newNote} openSettings={this.openSettings} />
+          <Sidebar notes={this.state.notes} theme={this.state.theme} edit={this.edit} chose={this.chose} delNote={this.delNote} newNote={this.newNote} openSettings={this.openSettings} />
         </div>
         <div className={style.body}>
-          <Body editing={this.state.editing} inUse={this.state.inUse} viewNote={this.viewNote} deleteNote={this.deleteNote} inUseIndex={this.state.inUseIndex} noteUpdate={this.noteUpdate} />
+          <Body editing={this.state.editing} theme={this.state.theme} inUse={this.state.inUse} viewNote={this.viewNote} deleteNote={this.deleteNote} inUseIndex={this.state.inUseIndex} noteUpdate={this.noteUpdate} />
+
         </div>
       </div>
     );

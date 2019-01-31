@@ -19,7 +19,7 @@ class Body extends Component {
 
     render() {
         return (
-            <div className={style.body} style={this.state.bodystyles}>
+            <div className={`${style.body} ${this.props.theme === "term" ? style.term : style.default}`}>
 
                 {this.props.editing ? (<Note md={this.props.inUse} swap={this.props.viewNote} delete={this.props.deleteNote} index={this.props.inUseIndex} update={this.props.noteUpdate} />) : (<Mdviewer md={this.props.inUse} />)}
             </div>
