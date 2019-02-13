@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import style from "./sidebar.sass"
+import styles from "./sidebar.sass"
+
 class SideBar extends Component {
     constructor(props) {
         super(props);
         this.state = {}
     }
 
-
     render() {
         return (
-            <div className={` ${this.props.theme === "term" ? style.term : style.default}`}>
+            <div className={styles.sidebar}>
                 {this.props.notes.map((note, index) => (
 
                     <div key={index} className={"stuff"}>

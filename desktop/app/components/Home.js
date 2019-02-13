@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 // import styles from './Counter.css';
-import style from "./counter.sass"
 import routes from '../constants/routes';
 import Body from "../components/body/Body"
 import Sidebar from "../components/sidebar/Sidebar"
@@ -10,9 +9,9 @@ import base from "../base"
 import firebase from 'firebase'
 import Settings from './Settings/Settings'
 
-console.log("firebase", firebase)
+//main styles
 
-console.log(base);
+import "./counter.sass"
 
 export default class Home extends Component<Props> {
   constructor(props) {
@@ -20,7 +19,7 @@ export default class Home extends Component<Props> {
 
     this.state = {
       notes: [],
-      theme: "term",
+      theme: "",
       inUse: "",
       inUseIndex: null,
       editing: null,
@@ -51,9 +50,13 @@ export default class Home extends Component<Props> {
     this.openSettings = this.openSettings.bind(this)
 
     this.closeSettings = this.closeSettings.bind(this)
+    this.fetchtheme = this.fetchtheme.bind(this)
 
   }
 
+  componentWillMount() {
+    this.setState({ theme: localStorage.getItem("theme") })
+  }
 
   componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
@@ -62,7 +65,7 @@ export default class Home extends Component<Props> {
         this.getNotes()
       }
     });
-
+    this.htmlClass(this.state.theme)
   }
 
   componentWillUnmount() {
@@ -190,11 +193,11 @@ export default class Home extends Component<Props> {
   }
 
   getNotes() {
-
     this.notesRef = base.syncState(`users/${this.state.uid}/notes`, {
       context: this,
       state: "notes"
     })
+    this.htmlClass(this.state.theme)
   }
 
   logout() {
@@ -216,8 +219,23 @@ export default class Home extends Component<Props> {
 
   themepick(pick) {
     console.log("changing theme", pick);
-
     this.setState({ theme: pick })
+    this.savetheme(pick)
+    this.fetchtheme()
+  }
+
+  htmlClass(pick) {
+    document.querySelector("html").className = " "
+    document.querySelector("html").classList.add(pick)
+  }
+
+  savetheme(pick) {
+    localStorage.setItem("theme", pick)
+  }
+
+  fetchtheme() {
+    this.setState({ theme: localStorage.getItem("theme") })
+    this.htmlClass(this.state.theme)
   }
 
   renderLogin() {
@@ -242,13 +260,13 @@ export default class Home extends Component<Props> {
     }
 
     return (
-      <div className={`${style.wraper} ${this.state.theme === "term" ? style.term : style.default}`}>
+      <div className="wraper">
 
-        <div className={style.sidebar}>
-          <Sidebar notes={this.state.notes} theme={this.state.theme} edit={this.edit} chose={this.chose} delNote={this.delNote} newNote={this.newNote} openSettings={this.openSettings} />
+        <div className="sidebar">
+          <Sidebar notes={this.state.notes} edit={this.edit} chose={this.chose} delNote={this.delNote} newNote={this.newNote} openSettings={this.openSettings} />
         </div>
-        <div className={style.body}>
-          <Body editing={this.state.editing} theme={this.state.theme} inUse={this.state.inUse} viewNote={this.viewNote} deleteNote={this.deleteNote} inUseIndex={this.state.inUseIndex} noteUpdate={this.noteUpdate} />
+        <div className="body">
+          <Body editing={this.state.editing} inUse={this.state.inUse} viewNote={this.viewNote} deleteNote={this.deleteNote} inUseIndex={this.state.inUseIndex} noteUpdate={this.noteUpdate} />
 
         </div>
       </div>
