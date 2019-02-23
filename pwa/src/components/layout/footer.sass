@@ -1,0 +1,48 @@
+@import '../vars.sass'
+
+footer
+    margin-top: 220px
+    display: flex
+    width: 100%
+    flex-direction: column
+    align-items: center
+    margin-bottom: 122px
+    @include navsnap
+        margin-top: 70px
+    h3
+        margin-bottom: 50px
+        font-family: $mainfont
+        color: $medium-grey
+    p
+        font-size: .8rem
+        @include navsnap
+            width: 70%
+            text-align: center
+    .signup
+        width: 40%
+        // background: lightskyblue
+        display: flex
+        justify-content: center
+        @include edgesnap
+            width: 70%
+        @include tablet
+            width: 100%
+        @import './mailchimp.sass'
+        // form
+        //     width: 60%   
+        //     margin: 30px
+        //     display: flex
+        //     // background: blue
+        //     justify-content: space-between
+        //     @include navsnap
+        //         width: 80%
+        //     input
+        //         width: 73%
+        //         padding: 20px
+        //         border-radius: 2px
+        //         border: 1px solid lightgray
+        //     button
+        //         align-items: center
+    .icons
+        img
+            margin: 7px

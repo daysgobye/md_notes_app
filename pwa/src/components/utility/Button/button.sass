@@ -1,0 +1,33 @@
+@import '../../base.sass'
+  
+.button
+  display: flex
+  &.loaded
+    // background: red 
+    // align-self: flex-start
+  a, a:visited
+    font-size: 0.95em
+    font-weight: 300
+    color: $accentlight
+    border: 1px solid $accentlight
+    padding: 0.7em 1.8em
+    border-radius: 3px
+    transition: all .2s ease-in-out
+    position: relative
+    overflow: hidden
+    @include tablet-phone 
+      font-size: 1.25em
+      padding: 0.7em 1.9em
+    @include phone-large 
+      font-size: 1rem   
+    &:hover
+      text-decoration: none
+      box-shadow: 0px 0px 20px -4px $accentlight
+   
+    .spacer
+      opacity: 0
+      // transform: translateY(20%)
+      transition: all 1.5s ease-in-out
+      &.loaded 
+        opacity: 1 
+        // transform: translateY(0)

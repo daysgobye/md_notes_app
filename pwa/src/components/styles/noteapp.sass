@@ -1,0 +1,81 @@
+.wraper
+    display: flex
+    // flex-direction: column
+    width: 100%
+    // height: 100%
+    height: 98vh
+    // overflow: scroll
+    .sidebar
+        display: flex
+        flex-direction: column
+        width: 7%
+        // height: 100%
+        &__note
+            display: flex
+            flex-direction: column
+            width: 100%
+            background: skyblue
+            margin-bottom: 10px
+    .is__opened
+        width: 100%
+        .open
+            display: flex
+            flex-direction: column
+            z-index: 10000
+            button
+                margin: 2px
+        .closed
+            display: none
+    .is__closed
+        width: 100%
+        .open
+            display: none
+    .bodyhide
+        opacity: 0
+
+    .body
+        right: 0
+        position: fixed
+        display: flex
+        // flex-direction: column
+        // justify-content: center
+        // align-items: center
+        // background: red
+        width: 100%
+        margin-top: 20px
+        // height: 100%
+        transition: all .3s
+.term
+    background: black
+    color: rgb(0, 255, 93)
+    textarea
+        background: black
+        color: rgb(0, 255, 93)
+        border: none
+    button
+        background: black
+        color: rgb(0, 255, 93)
+        border: 1px solid rgb(0, 255, 93)
+    ::-webkit-scrollbar
+        display: none
+.default
+    background: navy
+.anime
+    background: #10101026
+    background-image: url('https://i.imgur.com/Efz9hh7.png')
+    color: #ffd800
+    .wraper
+    .sidebar
+        background: #10101047
+    .body
+        background: #10101047
+    textarea
+        background: #10101000
+        color: #ffd800
+        border: none
+    button
+        background: #10101026
+        color: #ffd800
+        border: 1px solid #ffd800
+    ::-webkit-scrollbar
+        display: none

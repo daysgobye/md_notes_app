@@ -1,0 +1,130 @@
+@import '../base.sass'
+.header__wrapper
+    @include navsnap
+        position: sticky
+        top: 0
+        z-index: 10000
+
+.header
+    color: black
+    display: flex
+    align-items: center
+    padding: 40px 0
+    justify-content: space-between
+    width: 100vw
+    @include navsnap
+        padding: 10px 0
+    h1
+        // background: red
+        a
+            // font-size: .8em
+            font-family: $mainfont
+    .desktop
+        font-size: .9em
+        display: flex
+        width: 32%
+        // background: lightseagreen
+        @include edgesnap
+            width: 50%
+        @include tablet
+            width: 65%
+        @include navsnap
+            display: none
+        nav
+            display: flex
+            width: 100%
+            justify-content: space-between
+    .mobile
+        display: none
+        @include navsnap
+            display: flex
+        .dot
+            // background: skyblue
+            display: flex
+            padding: 10px
+            &:hover
+                animation: spin-dot 2s 2
+            &__one
+                animation: dot-in .8s forwards
+                transform: translateX(300%)
+                border-radius: 100%
+                background: black
+                width: 5px
+                height: 5px
+                margin: 2px
+            &__two
+                animation: dot-in .8s forwards
+                border-radius: 100%
+                transform: translateX(150%)
+                background: black
+                width: 5px
+                height: 5px
+                margin: 2px
+            &__three
+                animation: dot-in .8s forwards
+                border-radius: 100%
+                background: black
+                width: 5px
+                height: 5px
+                margin: 2px
+        .nav
+            width: 100vw
+            display: flex
+            align-items: flex-end
+            flex-direction: column
+            font-family: $subfont
+            font-weight: $light
+            padding-right: 20px
+            &__link
+                margin-left: 10px
+                margin-top: 20px
+    .nav__open, .nav__closed
+      position: relatve 
+      z-index: 1000
+      .nav 
+        transition: all 1.5s ease-in-out
+        width: 100vw
+        height: calc(100vh - 50px)
+        position: absolute
+        display: flex
+        margin-top: 45px
+    .nav__open
+        .nav
+            transform: translateX(0)
+            right: 0
+            width: 100vw
+    .nav__closed
+        .nav
+            transform: translateX(-200vw)
+            width: 100vw
+            right: 0
+    a
+        &:hover
+            color: $light-grey
+@keyframes spin-dot
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+@keyframes dot-in
+    100%
+        transform: translateX(0%)
+@keyframes nav-open
+
+
+    0%
+        transform: translateX(-100%)
+        opacity: 0
+    100%
+        transform: translateX(0%)
+        opacity: 1
+
+@keyframes nav-close
+
+    0%
+        transform: translateX(0%)
+        opacity: 1
+    100%
+        // visibility: hidden
+        transform: translateX(-100%)
+        opacity: 1

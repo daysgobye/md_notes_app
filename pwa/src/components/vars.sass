@@ -1,0 +1,102 @@
+//VARIABLES
+
+//general 
+
+
+//colors
+$bloggrey: #666A73
+$blue-grey: #102B3F
+$light-grey: #F0F0F0
+$grey: #A3A3A3
+$medium-grey: #919191
+
+$gradientdark: #62119B
+$gradientlight: #D62E26
+$gradientmid: #38E86F
+
+$gradientlight: #40EB92
+$gradientdark: #38E96E
+
+$darkgrey: #253031
+
+//og
+// $accentdark: #102B3F
+$accentdark: #122235
+//dark greyish
+// $accentdark: #253031
+// $accentdark: #1F2728
+// $accentdark: #363537
+// $accentdark: #2A2D43
+// $accentdark: #222222
+// $accentlight: rgb(240,129,148)
+$accentlight: rgb(175,37,205)
+
+//fonts 
+$mainfont: "Rubik", sans-serif
+$subfont: "Avenir", sans-serif
+
+//font-weights
+$light: 300
+$normal: 400
+$medium: 500
+
+// MIXINS
+
+
+$phone-small: 330px
+$phone-normal: 375px
+$phone-max-width: 440px
+$phone-large: 424px
+$tablet-phone: 650px
+$tablet-width: 768px
+$tablet-large: 1024px
+$desktop-width: 992px
+$edgesnap-width: 1100px
+$tablet-landscape-width: 1024px
+$nav-snap: 610px
+$featured-snap: 900px
+
+
+=tablet-large 
+  @media (max-width: #{$tablet-large})
+    @content
+
+=featured-snap 
+  @media (max-width: #{$featured-snap})
+    @content
+
+=edgesnap
+  @media (max-width: #{$edgesnap-width})
+    @content
+
+=tabletlandscape
+  @media (max-width: #{$tablet-landscape-width})
+    @content
+
+=navsnap
+  @media (max-width: #{$nav-snap})
+    @content
+
+=tablet-phone
+  @media (max-width: #{$tablet-phone})
+    @content
+
+=phone
+  @media (max-width: #{$phone-normal})
+    @content
+
+// =tablet-landscape
+//   @media (max-width: #{$tablet-width})
+//     @content
+
+=tablet
+  @media (max-width: #{$tablet-width})
+    @content
+
+=phone-large
+  @media (max-width: #{$phone-large})
+    @content
+
+=phone-small
+  @media (max-width: #{$phone-small})
+    @content

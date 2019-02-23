@@ -1,6 +1,10 @@
 
 import React from 'react'
-import Markdown from "./myMd/react-native-simple-markdown/index"
+// import Markdown from "./myMd/react-native-simple-markdown/index"
+// import Markdown from 'react-native-markdown-renderer';
+// import Markdown from 'react-markdown-native';
+// import { MarkdownView } from 'react-native-markdown-view'
+
 import {
     Image,
     Platform,
@@ -45,11 +49,13 @@ class Note extends React.Component {
             <View >
                 <Button onPress={this.swap} title="Edit it"
                     color="#841584"
-
                 />
-                <Markdown styles={markdownStyles}>
+                {/* <Markdown styles={markdownStyles}>
                     {this.props.md}
-                </Markdown>
+                </Markdown> */}
+                {/* <MarkdownView>
+                    {this.props.md}
+                </MarkdownView> */}
             </View>
         )
     }

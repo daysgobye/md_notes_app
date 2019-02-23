@@ -264,6 +264,7 @@
     "history": "^4.7.2",
     "re-base": "^4.0.0",
     "react": "^16.6.3",
+    "react-ace": "^6.4.0",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
     "react-redux": "^5.1.1",

@@ -1,0 +1,56 @@
+@import '../base.sass'
+
+.wraper
+    display: flex
+    flex-direction: column
+    width: 100%
+    .comp
+        width: 100%
+        margin: 50px
+        .icons
+            display: flex
+            justify-content: space-around
+
+    form
+        label
+            font-weight: $light
+            font-family: $mainfont
+            margin-bottom: 25px
+            display: flex
+            flex-direction: column
+            input
+                margin-top: 5px
+                padding: 15px
+                border-radius: 2px
+                border: 1px solid $light-grey
+            textarea
+                border: none
+                border-radius: 2px
+                border: 1px solid $light-grey
+                resize: none
+                margin-top: 5px
+        .name
+            justify-content: space-between
+            display: flex
+            flex-direction: row
+            &__input
+                width: 49%
+                input
+                    display: flex 
+                    width: 100%
+                p 
+                    margin-top: .4em
+                    font-size: .85em
+    .code
+        background: #eee
+        padding: 20px
+        border-left: 1px solid black
+    code
+        background: red
+        .show
+            margin: 10px
+            font-weight: bold
+        .codereal
+            margin: 20px
+        .highlight
+            color: #c320f5
